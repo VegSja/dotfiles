@@ -1,0 +1,302 @@
+env:
+  TERM: xterm-256color
+
+window:
+  decorations: none
+
+schemes:
+  gruvbox_light: &gruvbox_light
+   # Default colors
+    primary:
+      background: '0xf9f5d7'
+      foreground: '0x504945'
+
+    # Colors the cursor will use if `custom_cursor_colors` is true
+    cursor:
+      text: '0xf9f5d7'
+      cursor: '0x504945'
+
+    # Normal colors
+    normal:
+      black:   '0xf9f5d7'
+      red:     '0x9d0006'
+      green:   '0x79740e'
+      yellow:  '0xb57614'
+      blue:    '0x076678'
+      magenta: '0x8f3f71'
+      cyan:    '0x427b58'
+      white:   '0x504945'
+
+    # Bright colors
+    bright:
+      black:   '0xbdae93'
+      red:     '0x9d0006'
+      green:   '0x79740e'
+      yellow:  '0xb57614'
+      blue:    '0x076678'
+      magenta: '0x8f3f71'
+      cyan:    '0x427b58'
+      white:   '0x282828'
+
+    indexed_colors:
+      - { index: 16, color: '0xaf3a03' }
+      - { index: 17, color: '0xd65d0e' }
+      - { index: 18, color: '0xebdbb2' }
+      - { index: 19, color: '0xd5c4a1' }
+      - { index: 20, color: '0x665c54' }
+      - { index: 21, color: '0x3c3836' }
+
+  everforest_light: &everforest_light
+    # Default colors
+    primary:
+      background: '0xfdf6e3'
+      foreground: '0x5c6a72'
+
+    # Normal colors
+    normal:
+      black:   '0x5c6a72'
+      red:     '0xf85552'
+      green:   '0x8da101'
+      yellow:  '0xdfa000'
+      blue:    '0x3a94c5'
+      magenta: '0xdf69ba'
+      cyan:    '0x35a77c'
+      white:   '0xe0dcc7'
+
+    # Bright Colors
+    bright:
+      black:   '0x5c6a72'
+      red:     '0xf85552'
+      green:   '0x8da101'
+      yellow:  '0xdfa000'
+      blue:    '0x3a94c5'
+      magenta: '0xdf69ba'
+      cyan:    '0x35a77c'
+      white:   '0xe0dcc7'
+
+  everforest_dark_medium: &everforest_dark_medium
+      primary:
+        background: '#2d353b'
+        foreground: '#d3c6aa'
+      normal:
+        black:   '#475258'
+        red:     '#e67e80'
+        green:   '#a7c080'
+        yellow:  '#dbbc7f'
+        blue:    '#7fbbb3'
+        magenta: '#d699b6'
+        cyan:    '#83c092'
+        white:   '#d3c6aa'
+      bright:
+        black:   '#475258'
+        red:     '#e67e80'
+        green:   '#a7c080'
+        yellow:  '#dbbc7f'
+        blue:    '#7fbbb3'
+        magenta: '#d699b6'
+        cyan:    '#83c092'
+        white:   '#d3c6aa'
+
+  everforest_dark_soft: &everforest_dark_soft
+      primary:
+        background: '#333c43'
+        foreground: '#d3c6aa'
+      normal:
+        black:   '#4d5960'
+        red:     '#e67e80'
+        green:   '#a7c080'
+        yellow:  '#dbbc7f'
+        blue:    '#7fbbb3'
+        magenta: '#d699b6'
+        cyan:    '#83c092'
+        white:   '#d3c6aa'
+      bright:
+        black:   '#4d5960'
+        red:     '#e67e80'
+        green:   '#a7c080'
+        yellow:  '#dbbc7f'
+        blue:    '#7fbbb3'
+        magenta: '#d699b6'
+        cyan:    '#83c092'
+        white:   '#d3c6aa'
+
+  catpuccin: &catpuccin
+      primary:
+          background: "#1E1E2E" # base
+          foreground: "#CDD6F4" # text
+          # Bright and dim foreground colors
+          dim_foreground: "#CDD6F4" # text
+          bright_foreground: "#CDD6F4" # text
+
+      # Cursor colors
+      cursor:
+          text: "#1E1E2E" # base
+          cursor: "#F5E0DC" # rosewater
+      vi_mode_cursor:
+          text: "#1E1E2E" # base
+          cursor: "#B4BEFE" # lavender
+
+      # Search colors
+      search:
+          matches:
+              foreground: "#1E1E2E" # base
+              background: "#A6ADC8" # subtext0
+          focused_match:
+              foreground: "#1E1E2E" # base
+              background: "#A6E3A1" # green
+          footer_bar:
+              foreground: "#1E1E2E" # base
+              background: "#A6ADC8" # subtext0
+
+      # Keyboard regex hints
+      hints:
+          start:
+              foreground: "#1E1E2E" # base
+              background: "#F9E2AF" # yellow
+          end:
+              foreground: "#1E1E2E" # base
+              background: "#A6ADC8" # subtext0
+
+      # Selection colors
+      selection:
+          text: "#1E1E2E" # base
+          background: "#F5E0DC" # rosewater
+
+      # Normal colors
+      normal:
+          black: "#45475A" # surface1
+          red: "#F38BA8" # red
+          green: "#A6E3A1" # green
+          yellow: "#F9E2AF" # yellow
+          blue: "#89B4FA" # blue
+          magenta: "#F5C2E7" # pink
+          cyan: "#94E2D5" # teal
+          white: "#BAC2DE" # subtext1
+
+      # Bright colors
+      bright:
+          black: "#585B70" # surface2
+          red: "#F38BA8" # red
+          green: "#A6E3A1" # green
+          yellow: "#F9E2AF" # yellow
+          blue: "#89B4FA" # blue
+          magenta: "#F5C2E7" # pink
+          cyan: "#94E2D5" # teal
+          white: "#A6ADC8" # subtext0
+
+      # Dim colors
+      dim:
+          black: "#45475A" # surface1
+          red: "#F38BA8" # red
+          green: "#A6E3A1" # green
+          yellow: "#F9E2AF" # yellow
+          blue: "#89B4FA" # blue
+          magenta: "#F5C2E7" # pink
+          cyan: "#94E2D5" # teal
+          white: "#BAC2DE" # subtext1
+
+      indexed_colors:
+          - { index: 16, color: "#FAB387" }
+            #
+
+  onedark: &onedark
+     # Default colors
+    primary:
+      background: '0x1e2127'
+      foreground: '0xabb2bf'
+
+      # Bright and dim foreground colors
+      #
+      # The dimmed foreground color is calculated automatically if it is not present.
+      # If the bright foreground color is not set, or `draw_bold_text_with_bright_colors`
+      # is `false`, the normal foreground color will be used.
+      #dim_foreground: '0x9a9a9a'
+      bright_foreground: '0xe6efff'
+
+    # Cursor colors
+    #
+    # Colors which should be used to draw the terminal cursor. If these are unset,
+    # the cursor color will be the inverse of the cell color.
+    #cursor:
+    #  text: '0x000000'
+    #  cursor: '0xffffff'
+
+    # Normal colors
+    normal:
+      black:   '0x1e2127'
+      red:     '0xe06c75'
+      green:   '0x98c379'
+      yellow:  '0xd19a66'
+      blue:    '0x61afef'
+      magenta: '0xc678dd'
+      cyan:    '0x56b6c2'
+      white:   '0x828791'
+
+    # Bright colors
+    bright:
+      black:   '0x5c6370'
+      red:     '0xe06c75'
+      green:   '0x98c379'
+      yellow:  '0xd19a66'
+      blue:    '0x61afef'
+      magenta: '0xc678dd'
+      cyan:    '0x56b6c2'
+      white:   '0xe6efff'
+
+    # Dim colors
+    #
+    # If the dim colors are not set, they will be calculated automatically based
+    # on the `normal` colors.
+    dim:
+      black:   '0x1e2127'
+      red:     '0xe06c75'
+      green:   '0x98c379'
+      yellow:  '0xd19a66'
+      blue:    '0x61afef'
+      magenta: '0xc678dd'
+      cyan:    '0x56b6c2'
+      white:   '0x828791'
+
+    # Indexed Colors
+    #
+    # The indexed colors include all colors from 16 to 256.
+    # When these are not set, they're filled with sensible defaults.
+    #indexed_colors:
+    #  - { index: 16, color: '0x000000' }         - { index: 17, color: "#F5E0DC" }
+
+colors: *onedark
+
+font:
+  # Normal (roman) font face
+  normal:
+    family: FiraCode nerd Font Mono
+    # The `style` can be specified to pick a specific face.
+    style: Regular
+
+  # Bold font face
+  bold:
+    family: FiraCode nerd Font Mono
+    # The `style` can be specified to pick a specific face.
+    style: Bold
+
+  # Italic font face
+  italic:
+    family: FiraCode nerd Font Mono
+    # The `style` can be specified to pick a specific face.
+    style: Italic
+
+  # Point size of the font
+  size: 12.0
+
+  # Offset is the extra space around each character. `offset.y` can be thought of
+  # as modifying the line spacing, and `offset.x` as modifying the letter spacing.
+  offset:
+    x: 0
+    y: 0
+
+  # Glyph offset determines the locations of the glyphs within their cells with
+  # the default being at the bottom. Increasing `x` moves the glyph to the right,
+  # increasing `y` moves the glyph upwards.
+  glyph_offset:
+    x: 0
+    y: 0
