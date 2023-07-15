@@ -8,7 +8,17 @@
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;(package! some-package)
-(package! catppuccin-theme)
+; General stuff
+(package! beacon)
+
+; Python stuff
+(package! with-venv)
+(package! flycheck-mypy)
+
+; org stuff
+(package! company-posframe)
+(package! org-appear)
+(package! org-superstar)
 
 ;; To install a package directly from a remote git repo, you must specify a
 ;; `:recipe'. You'll find documentation on what `:recipe' accepts here:

@@ -28,11 +28,12 @@
 ;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
 ;; refresh your font settings. If Emacs still can't find your font, it likely
 ;; wasn't installed correctly. Font issues are rarely Doom issues!
+(setq doom-font (font-spec :family "FiraCode Nerd Font Mono" :size 16 :weight 'normal))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'catppuccin)
+(setq doom-theme 'doom-one)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -66,6 +67,7 @@
 ;;   `require' or `use-package'.
 ;; - `map!' for binding new keys
 ;;
+;;
 ;; To get information about any of these functions/macros, move the cursor over
 ;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
 ;; This will open documentation for it, including demos of how they are used.
@@ -74,3 +76,105 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
+
+; General stuff
+(setq +format-with-lsp nil)
+(after! flycheck-posframe
+        (add-hook 'flycheck-mode-hook #'flycheck-posframe-mode)
+        (flycheck-posframe-configure-pretty-defaults))
+
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+(setq indent-line-function 'insert-tab)
+
+; Python stuff
+(after! dap-mode
+  (setq dap-python-debugger 'debugpy))
+
+
+(after! python
+        (add-hook 'python-mode-hook #'flycheck-mode)
+        (add-hook 'python-mode-hook
+            (lambda ()
+              (setq-local flycheck-checker 'python-mypy)
+              (flycheck-add-next-checker 'python-flake8 'python-mypy))))
+
+;; org-mode improvements
+(after! org-roam
+  (setq org-roam-directory (file-truename "/home/vs/Notes/org-notes"))
+  ;; If you're using a vertical completion framework, you might want a more informative completion interface
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+)
+
+
+;; Improve org mode looks
+(after! mixed-pitch
+    (add-hook 'text-mode-hook #'mixed-pitch-mode)
+    (set-face-attribute 'default nil :font "DejaVu Sans Mono" :height 130)
+    (set-face-attribute 'fixed-pitch nil :font "DejaVu Sans Mono")
+    (set-face-attribute 'variable-pitch nil :font "DejaVu Sans"))
+(add-hook 'mixed-pitch-mode-hook #'solaire-mode-reset)
+
+(after! company-posframe
+  (setq company-posframe-mode 1))
+
+(setq org-startup-indented t
+        org-pretty-entities t
+        org-hide-emphasis-markers t
+        org-startup-with-inline-images t
+        org-image-actual-width '(300))
+
+(after! org
+  (after! org-appear
+    (add-hook 'org-mode-hook #'org-appear-mode))
+  (after! org-superstar)
+    (add-hook 'org-mode-hook
+              (lambda () (org-superstar-mode 1)))
+  (setq org-format-latex-options
+        (plist-put org-format-latex-options :scale 2))
+  ;; Increase line spacing
+  (setq-default line-spacing 6))
+
+;; Keys
+(map! :map dap-mode-map
+      :leader
+      :prefix ("d" . "dap")
+      ;; basics
+      :desc "dap next"          "n" #'dap-next
+      :desc "dap step in"       "i" #'dap-step-in
+      :desc "dap step out"      "o" #'dap-step-out
+      :desc "dap continue"      "c" #'dap-continue
+      :desc "dap hydra"         "h" #'dap-hydra
+      :desc "dap debug restart" "r" #'dap-debug-restart
+      :desc "dap debug"         "s" #'dap-debug
+      :desc "dap disconnect"    "q" #'dap-disconnect
+
+      ;; debug
+      :prefix ("dd" . "Debug")
+      :desc "dap debug recent"  "r" #'dap-debug-recent
+      :desc "dap debug last"    "l" #'dap-debug-last
+
+      ;; eval
+      :prefix ("de" . "Eval")
+      :desc "eval"                "e" #'dap-eval
+      :desc "eval region"         "r" #'dap-eval-region
+      :desc "eval thing at point" "s" #'dap-eval-thing-at-point
+      :desc "add expression"      "a" #'dap-ui-expressions-add
+      :desc "remove expression"   "d" #'dap-ui-expressions-remove
+
+      :prefix ("db" . "Breakpoint")
+      :desc "dap breakpoint toggle"      "b" #'dap-breakpoint-toggle
+      :desc "dap breakpoint condition"   "c" #'dap-breakpoint-condition
+      :desc "dap breakpoint hit count"   "h" #'dap-breakpoint-hit-condition
+      :desc "dap breakpoint log message" "l" #'dap-breakpoint-log-message)
+
+(map! :map org-roam
+      :leader
+      :prefix ("r", "org-roam")
+
+      ;;
+      :desc "Org-roam toggle buffer"    "l" #'org-roam-buffer-toggle
+      :desc "Org-roam find node"        "f" #'org-roam-node-find
+      :desc "Org-roam graph"            "g" #'org-roam-graph
+      :desc "Org-roam node insert"      "i" #'org-roam-node-insert
+      :desc "Org-roam capture"          "c" #'org-roam-capture)
