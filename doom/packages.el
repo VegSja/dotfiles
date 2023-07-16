@@ -11,6 +11,10 @@
 ; General stuff
 (package! beacon)
 
+; Copilot stuff
+(package! copilot
+  :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))
+
 ; Python stuff
 (package! with-venv)
 (package! flycheck-mypy)

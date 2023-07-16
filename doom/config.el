@@ -33,7 +33,14 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
+(setq doom-theme 'doom-1337)
+(custom-theme-set-faces!
+'doom-1337
+'(org-level-4 :inherit outline-4 :height 1.1)
+'(org-level-3 :inherit outline-3 :height 1.25)
+'(org-level-2 :inherit outline-2 :height 1.5)
+'(org-level-1 :inherit outline-1 :height 1.75)
+'(org-document-title :height 2.0 :underline nil))
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -87,6 +94,17 @@
 (setq-default tab-width 4)
 (setq indent-line-function 'insert-tab)
 
+; copilot-stuff
+; accept completion from copilot and fallback to company
+(use-package! copilot
+  :hook (prog-mode . copilot-mode)
+  :bind (:map copilot-completion-map
+              ("<tab>" . 'copilot-accept-completion)
+              ("TAB" . 'copilot-accept-completion)
+              ("C-TAB" . 'copilot-accept-completion-by-word)
+              ("C-<tab>" . 'copilot-accept-completion-by-word)))
+
+
 ; Python stuff
 (after! dap-mode
   (setq dap-python-debugger 'debugpy))
@@ -100,6 +118,12 @@
               (flycheck-add-next-checker 'python-flake8 'python-mypy))))
 
 ;; org-mode improvements
+(after! org
+  (setq org-src-fontify-natively t
+        org-src-tab-acts-natively t
+        org-src-preserve-indentation t
+        org-edit-src-content-indentation 0))
+
 (after! org-roam
   (setq org-roam-directory (file-truename "/home/vs/Notes/org-notes"))
   ;; If you're using a vertical completion framework, you might want a more informative completion interface
@@ -124,6 +148,30 @@
         org-startup-with-inline-images t
         org-image-actual-width '(300))
 
+(defun org-icons ()
+   "Beautify org mode keywords."
+        (setq prettify-symbols-alist
+        '(("#+begin_src" . ?)
+        ("#+BEGIN_SRC" . ?)
+        ("#+end_src" . ?)
+        ("#+END_SRC" . ?)
+        ("#+begin_example" . ?)
+        ("#+BEGIN_EXAMPLE" . ?)
+        ("#+end_example" . ?)
+        ("#+END_EXAMPLE" . ?)
+        ("#+header:" . ?)
+        ("#+HEADER:" . ?)
+        ("#+name:" . ?﮸)
+        ("#+NAME:" . ?﮸)
+        ("#+results:" . ?)
+        ("#+RESULTS:" . ?)
+        ("#+call:" . ?)
+        ("#+CALL:" . ?)
+        (":PROPERTIES:" . ?)
+        (":properties:" . ?)
+        (":LOGBOOK:" . ?)
+        (":logbook:" . ?)))
+        (prettify-symbols-mode 1))
 (after! org
   (after! org-appear
     (add-hook 'org-mode-hook #'org-appear-mode))
@@ -132,8 +180,11 @@
               (lambda () (org-superstar-mode 1)))
   (setq org-format-latex-options
         (plist-put org-format-latex-options :scale 2))
+  (add-hook 'org-mode-hook 'org-icons)
   ;; Increase line spacing
-  (setq-default line-spacing 6))
+  (setq-default line-spacing 6)
+  (setq org-block-end-line '((t (:foreground "red"))))
+  )
 
 ;; Keys
 (map! :map dap-mode-map
