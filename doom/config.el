@@ -33,9 +33,9 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-1337)
+(setq doom-theme 'doom-material-dark)
 (custom-theme-set-faces!
-'doom-1337
+'doom-material-dark
 '(org-level-4 :inherit outline-4 :height 1.1)
 '(org-level-3 :inherit outline-3 :height 1.25)
 '(org-level-2 :inherit outline-2 :height 1.5)
@@ -122,7 +122,8 @@
   (setq org-src-fontify-natively t
         org-src-tab-acts-natively t
         org-src-preserve-indentation t
-        org-edit-src-content-indentation 0))
+        org-edit-src-content-indentation 0)
+  (add-hook 'org-mode-hook 'org-fragtog-mode))
 
 (after! org-roam
   (setq org-roam-directory (file-truename "/home/vs/Notes/org-notes"))
