@@ -123,14 +123,30 @@
         org-src-tab-acts-natively t
         org-src-preserve-indentation t
         org-edit-src-content-indentation 0)
-  (add-hook 'org-mode-hook 'org-fragtog-mode))
+        (setq org-agenda-files (list "~/org/")))
 
 (after! org-roam
-  (setq org-roam-directory (file-truename "/home/vs/Notes/org-notes"))
-  ;; If you're using a vertical completion framework, you might want a more informative completion interface
+  (setq org-roam-directory (file-truename "~/org/roam/"))
+  (setq org-complete-everywhere t)
+  (setq org-roam-capture-templates
+        '(("d" "default" plain
+           "%?"
+           :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+           :unnarrowed t)
+          ("b" "book note" plain
+           "\n* Source\n\nAuthor: %^{Author}\nTitle: ${title}\nYear: %^{Year}\n\n* Summary\n\n%?"
+           :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title} \n#+filetags: Book\n")
+           :unnarrowed t)
+          ("a" "article note" plain
+           "\n* Source\n\nAuthor: %^{Author}\nTitle: ${title}\nURL: $^{URL}\n\n* Summary\n\n%?"
+           :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title} \n#+filetags: Article\n")
+           :unnarrowed t)
+          ("c" "class note" plain
+           "\n* General information\nClassname: ${title}\nAbbreviated: ${abbreviation}\nLecture schedule:\nProfessor: %^{Professor}\nYear: %^{Year}\nSemester: %^{semester}\n* Exercise information\n* Exam information\n\n%?"
+           :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title} \n#+filetags: Class\n")
+           :unnarrowed t)))
   (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-)
-
+  (org-roam-setup))
 
 ;; Improve org mode looks
 (after! mixed-pitch
@@ -180,11 +196,10 @@
     (add-hook 'org-mode-hook
               (lambda () (org-superstar-mode 1)))
   (setq org-format-latex-options
-        (plist-put org-format-latex-options :scale 2))
+        (plist-put org-format-latex-options :scale 1.5))
   (add-hook 'org-mode-hook 'org-icons)
   ;; Increase line spacing
   (setq-default line-spacing 6)
-  (setq org-block-end-line '((t (:foreground "red"))))
   )
 
 ;; Keys
@@ -220,13 +235,8 @@
       :desc "dap breakpoint hit count"   "h" #'dap-breakpoint-hit-condition
       :desc "dap breakpoint log message" "l" #'dap-breakpoint-log-message)
 
-(map! :map org-roam
+(map! :map org
       :leader
-      :prefix ("r", "org-roam")
+      :prefix ("n" . "notes")
 
-      ;;
-      :desc "Org-roam toggle buffer"    "l" #'org-roam-buffer-toggle
-      :desc "Org-roam find node"        "f" #'org-roam-node-find
-      :desc "Org-roam graph"            "g" #'org-roam-graph
-      :desc "Org-roam node insert"      "i" #'org-roam-node-insert
-      :desc "Org-roam capture"          "c" #'org-roam-capture)
+      :desc "Render latex"      "L" #'org-latex-preview)
