@@ -46,9 +46,15 @@
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
 
+;; The most important part of the config
+
+
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
+
+;; The most imporant part of the config
+(setq fancy-splash-image (expand-file-name "banner.png" doom-user-dir))
 
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
@@ -146,7 +152,7 @@
            :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title} \n#+filetags: Class\n")
            :unnarrowed t)))
   (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-  (org-roam-setup))
+  (org-roam-db-autosync-enable))
 
 ;; Improve org mode looks
 (after! mixed-pitch
