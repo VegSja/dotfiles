@@ -33,9 +33,9 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-material-dark)
+(setq doom-theme 'doom-tomorrow-night)
 (custom-theme-set-faces!
-'doom-material-dark
+'doom-tomorrow-night
 '(org-level-4 :inherit outline-4 :height 1.1)
 '(org-level-3 :inherit outline-3 :height 1.25)
 '(org-level-2 :inherit outline-2 :height 1.5)
