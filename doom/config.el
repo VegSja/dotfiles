@@ -33,14 +33,13 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-tomorrow-night)
-(custom-theme-set-faces!
-'doom-tomorrow-night
-'(org-level-4 :inherit outline-4 :height 1.1)
-'(org-level-3 :inherit outline-3 :height 1.25)
-'(org-level-2 :inherit outline-2 :height 1.5)
-'(org-level-1 :inherit outline-1 :height 1.75)
-'(org-document-title :height 2.0 :underline nil))
+(setq doom-theme 'doom-one)
+(custom-set-faces
+ '(org-level-4 ((t (:inherit outline-4 :height 1.1))))
+ '(org-level-3 ((t (:inherit outline-3 :height 1.25))))
+ '(org-level-2 ((t (:inherit outline-2 :height 1.5))))
+ '(org-level-1 ((t (:inherit outline-1 :height 1.75))))
+ '(org-document-title ((t (:height 2.0)))))
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -52,10 +51,7 @@
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
-
-;; The most imporant part of the config
-(setq fancy-splash-image (expand-file-name "banner.png" doom-user-dir))
-
+(setq org-default-notes-file "~/org/inbox.org")
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
@@ -90,18 +86,27 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-; General stuff
+                                        ; General stuff
 (setq +format-with-lsp nil)
 (after! flycheck-posframe
-        (add-hook 'flycheck-mode-hook #'flycheck-posframe-mode)
-        (flycheck-posframe-configure-pretty-defaults))
+  (add-hook 'flycheck-mode-hook #'flycheck-posframe-mode)
+  (flycheck-posframe-configure-pretty-defaults))
 
+(use-package theme-changer
+  :config
+  ;; setq the location here.
+  (setq calendar-location-name "Milan, Italy")
+  (setq calendar-latitude 45.464664)
+  (setq calendar-longitude 9.188540)
+  (change-theme 'doom-one 'doom-one))
+
+;; Different stuff
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq indent-line-function 'insert-tab)
 
-; copilot-stuff
-; accept completion from copilot and fallback to company
+                                        ; copilot-stuff
+                                        ; accept completion from copilot and fallback to company
 (use-package! copilot
   :hook (prog-mode . copilot-mode)
   :bind (:map copilot-completion-map
@@ -111,138 +116,183 @@
               ("C-<tab>" . 'copilot-accept-completion-by-word)))
 
 
-; Python stuff
+                                        ; Python stuff
 (after! dap-mode
   (setq dap-python-debugger 'debugpy))
 
 
 (after! python
-        (add-hook 'python-mode-hook #'flycheck-mode)
-        (add-hook 'python-mode-hook
+  (add-hook 'python-mode-hook #'flycheck-mode)
+  (add-hook 'python-mode-hook
             (lambda ()
-              (setq-local flycheck-checker 'python-mypy)
-              (flycheck-add-next-checker 'python-flake8 'python-mypy))))
+              (flycheck-add-next-checker 'python-flake8 'python-mypy))
+            )
+  )
 
-;; org-mode improvements
-(after! org
-  (setq org-src-fontify-natively t
-        org-src-tab-acts-natively t
-        org-src-preserve-indentation t
-        org-edit-src-content-indentation 0)
-        (setq org-agenda-files (list "~/org/")))
 
-(after! org-roam
-  (setq org-roam-directory (file-truename "~/org/roam/"))
-  (setq org-complete-everywhere t)
-  (setq org-roam-capture-templates
-        '(("d" "default" plain
-           "%?"
-           :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-           :unnarrowed t)
-          ("b" "book note" plain
-           "\n* Source\n\nAuthor: %^{Author}\nTitle: ${title}\nYear: %^{Year}\n\n* Summary\n\n%?"
-           :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title} \n#+filetags: Book\n")
-           :unnarrowed t)
-          ("a" "article note" plain
-           "\n* Source\n\nAuthor: %^{Author}\nTitle: ${title}\nURL: $^{URL}\n\n* Summary\n\n%?"
-           :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title} \n#+filetags: Article\n")
-           :unnarrowed t)
-          ("c" "class note" plain
-           "\n* General information\nClassname: ${title}\nAbbreviated: ${abbreviation}\nLecture schedule:\nProfessor: %^{Professor}\nYear: %^{Year}\nSemester: %^{semester}\n* Exercise information\n* Exam information\n\n%?"
-           :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title} \n#+filetags: Class\n")
-           :unnarrowed t)))
-  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-  (org-roam-db-autosync-enable))
+(after! markdown-mode
+  (custom-set-faces!
+    '(markdown-header-delimiter-face :height 0.9)
+    '(markdown-header-face-1 :height 1.8 :weight extra-bold :inherit markdown-header-face)
+    '(markdown-header-face-2 :height 1.4 :weight extra-bold :inherit markdown-header-face)
+    '(markdown-header-face-3 :height 1.2 :weight extra-bold :inherit markdown-header-face)
+    '(markdown-header-face-4 :height 1.15 :weight bold :inherit markdown-header-face)
+    '(markdown-header-face-5 :height 1.1 :weight bold :inherit markdown-header-face)
+    '(markdown-header-face-6 :height 1.05 :weight semi-bold :inherit markdown-header-face))
+  )
 
 ;; Improve org mode looks
 (after! mixed-pitch
-    (add-hook 'text-mode-hook #'mixed-pitch-mode)
-    (set-face-attribute 'default nil :font "DejaVu Sans Mono" :height 130)
-    (set-face-attribute 'fixed-pitch nil :font "DejaVu Sans Mono")
-    (set-face-attribute 'variable-pitch nil :font "DejaVu Sans"))
+  (add-hook 'text-mode-hook #'mixed-pitch-mode)
+  (set-face-attribute 'default nil :font "DejaVu Sans Mono" :height 130)
+  (set-face-attribute 'fixed-pitch nil :font "DejaVu Sans Mono")
+  (set-face-attribute 'variable-pitch nil :font "DejaVu Sans"))
 (add-hook 'mixed-pitch-mode-hook #'solaire-mode-reset)
 
 (after! company-posframe
   (setq company-posframe-mode 1))
 
-(setq org-startup-indented t
+;; org-mode improvements
+(defun org-icons ()
+  (setq prettify-symbols-alist
+        '(("#+begin_src" . ?)
+          ("#+BEGIN_SRC" . ?)
+          ("#+end_src" . ?)
+          ("#+END_SRC" . ?)
+          ("#+begin_example" . ?)
+          ("#+BEGIN_EXAMPLE" . ?)
+          ("#+end_example" . ?)
+          ("#+END_EXAMPLE" . ?)
+          ("#+header:" . ?)
+          ("#+HEADER:" . ?)
+          ("#+name:" . ?﮸)
+          ("#+NAME:" . ?﮸)
+          ("#+results:" . ?)
+          ("#+RESULTS:" . ?)
+          ("#+call:" . ?)
+          ("#+CALL:" . ?)
+          (":PROPERTIES:" . ?)
+          (":properties:" . ?)
+          (":LOGBOOK:" . ?)
+          (":logbook:" . ?)))
+  (prettify-symbols-mode 1))
+
+
+(after! org
+  (add-hook 'org-mode-hook (lambda () (company-mode -1)))
+  (add-hook 'org-mode-hook 'org-icons)
+  (setq-default line-spacing 6)
+  (setq org-src-fontify-natively t
+        org-startup-indented t
         org-pretty-entities t
         org-hide-emphasis-markers t
         org-startup-with-inline-images t
-        org-image-actual-width '(300))
-
-(defun org-icons ()
-   "Beautify org mode keywords."
-        (setq prettify-symbols-alist
-        '(("#+begin_src" . ?)
-        ("#+BEGIN_SRC" . ?)
-        ("#+end_src" . ?)
-        ("#+END_SRC" . ?)
-        ("#+begin_example" . ?)
-        ("#+BEGIN_EXAMPLE" . ?)
-        ("#+end_example" . ?)
-        ("#+END_EXAMPLE" . ?)
-        ("#+header:" . ?)
-        ("#+HEADER:" . ?)
-        ("#+name:" . ?﮸)
-        ("#+NAME:" . ?﮸)
-        ("#+results:" . ?)
-        ("#+RESULTS:" . ?)
-        ("#+call:" . ?)
-        ("#+CALL:" . ?)
-        (":PROPERTIES:" . ?)
-        (":properties:" . ?)
-        (":LOGBOOK:" . ?)
-        (":logbook:" . ?)))
-        (prettify-symbols-mode 1))
-(after! org
-  (after! org-appear
-    (add-hook 'org-mode-hook #'org-appear-mode))
-  (after! org-superstar)
-    (add-hook 'org-mode-hook
-              (lambda () (org-superstar-mode 1)))
+        org-image-actual-width '(300)
+        org-src-tab-acts-natively t
+        org-src-preserve-indentation nil
+        org-edit-src-content-indentation 0
+        org-ellipsis " ▼ "
+        )
+  ;; Latex
   (setq org-format-latex-options
         (plist-put org-format-latex-options :scale 1.5))
-  (add-hook 'org-mode-hook 'org-icons)
-  ;; Increase line spacing
-  (setq-default line-spacing 6)
+  ;; Org-agenda
+  (setq org-agenda-start-with-log-mode t
+        org-log-done 'time)
+  (setq org-agenda-files (directory-files-recursively "~/org/" "\\.org$"))
+  (setq org-fancy-priorities-list '("🔥" "🌊" "💤")
+        org-agenda-block-separator 8411)
+  (setq org-todo-keywords        ; This overwrites the default Doom org-todo-keywords
+        '((sequence
+           "TODO(t)"           ; A task that is ready to be tackled
+           "WRITE(b)"           ; Blog writing assignments
+           "PROJ(p)"           ; A project that contains other tasks
+           "MEETING(m)"          ; Video assignments
+           "LECTURE(l)"          ; Video assignments
+           "WAIT(w)"           ; Something is holding up this task
+           "|"                 ; The pipe necessary to separate "active" states and "inactive" states
+           "DONE(d)"           ; Task has been completed
+           "NOTED(n)"           ; Task has been captured as a note
+           "CANCELLED(c)" )))  ; Task has been cancelled
+  ;; Org-capture
+  (setq org-capture-templates
+        '(("i" "Inbox" entry (file+headline "~/org/inbox.org" "Tasks")
+           "* TODO %?\n %i\n %a")))
+  ;; Org-babel
+  (after! org-babel
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((python . t)
+       (emacs-lisp . t)
+       (shell . t)
+       (latex . t)
+       ))))
+
+(use-package! org-modern
+  :hook ((org-mode . org-modern-mode)
+         (org-agenda-finalize-hook . org-modern-agenda)
+         (global-org-modern-mode))
+  :config
+  (setq
+   ;; Appearance
+   org-hide-emphasis-markers t
+   org-pretty-entities t
+   org-modern-radio-target    '("❰" t "❱")
+   org-modern-internal-target '("↪ " t "")
+   org-modern-todo t
+   org-modern-tag t
+   org-modern-timestamp t
+   org-modern-statistics t
+   org-modern-priority t
+   org-modern-horizontal-rule "──────────"
+   org-modern-hide-stars "·"
+   org-modern-star ["⁖"]
+   org-modern-keyword "‣"
+   org-modern-list '((43 . "•")
+                     (45 . "–")
+                     (42 . "↪"))
+   org-agenda-tags-column 'auto
+   org-agenda-block-separator ?─
+   org-agenda-time-grid
+   '((daily today require-timed)
+     (800 1000 1200 1400 1600 1800 2000)
+     " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+   org-agenda-current-time-string
+   "◀── now ─────────────────────────────────────────────────")
+
+  (custom-set-faces!
+    `((org-modern-tag)
+      :background ,(doom-blend (doom-color 'blue) (doom-color 'bg) 0.1)
+      :foreground ,(doom-color 'grey))
+    `((org-modern-radio-target org-modern-internal-target)
+      :inherit 'default :foreground ,(doom-color 'blue)))
   )
 
-;; Keys
-(map! :map dap-mode-map
-      :leader
-      :prefix ("d" . "dap")
-      ;; basics
-      :desc "dap next"          "n" #'dap-next
-      :desc "dap step in"       "i" #'dap-step-in
-      :desc "dap step out"      "o" #'dap-step-out
-      :desc "dap continue"      "c" #'dap-continue
-      :desc "dap hydra"         "h" #'dap-hydra
-      :desc "dap debug restart" "r" #'dap-debug-restart
-      :desc "dap debug"         "s" #'dap-debug
-      :desc "dap disconnect"    "q" #'dap-disconnect
 
-      ;; debug
-      :prefix ("dd" . "Debug")
-      :desc "dap debug recent"  "r" #'dap-debug-recent
-      :desc "dap debug last"    "l" #'dap-debug-last
-
-      ;; eval
-      :prefix ("de" . "Eval")
-      :desc "eval"                "e" #'dap-eval
-      :desc "eval region"         "r" #'dap-eval-region
-      :desc "eval thing at point" "s" #'dap-eval-thing-at-point
-      :desc "add expression"      "a" #'dap-ui-expressions-add
-      :desc "remove expression"   "d" #'dap-ui-expressions-remove
-
-      :prefix ("db" . "Breakpoint")
-      :desc "dap breakpoint toggle"      "b" #'dap-breakpoint-toggle
-      :desc "dap breakpoint condition"   "c" #'dap-breakpoint-condition
-      :desc "dap breakpoint hit count"   "h" #'dap-breakpoint-hit-condition
-      :desc "dap breakpoint log message" "l" #'dap-breakpoint-log-message)
+(after! org-appear
+  (add-hook 'org-mode-hook #'org-appear-mode))
 
 (map! :map org
       :leader
       :prefix ("n" . "notes")
-
       :desc "Render latex"      "L" #'org-latex-preview)
+
+
+(setq org-agenda-custom-commands
+      '(("d" "Today's Tasks"
+         ((agenda "" ((org-agenda-span 1)
+                      (org-agenda-overriding-header "Today's Tasks")
+                      ))))
+        ("." "Todays Agenda"
+         ((agenda "" ((org-agenda-span 1)
+                      (org-agenda-skip-deadline-prewarning-if-scheduled t)))))
+        ("n" "Next Tasks"
+         ((todo "NEXT"
+                ((org-agenda-overriding-header "Next Tasks")))))
+
+        ("u" "Uni Tasks" tags-todo "+UNI")
+
+        ;; Low-effort next actions
+        ("e" tags-todo "+TODO=\"NEXT\"+Effort<15&+Effort>0"
+         ((org-agenda-overriding-header "Low Effort Tasks")
+          (org-agenda-max-todos 20)))))
