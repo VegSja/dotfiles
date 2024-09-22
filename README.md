@@ -4,7 +4,7 @@ This repository contains my dotfiles for my macOS setup. It includes configurati
 - [Aerospace](https://github.com/nikitabobko/AeroSpace)
 
 ## Screenshots
-![Screenshot](screen.png)
+![Screenshot](screen1.png)
 
 ## Installation
 The project requires some dependencies to be installed. You can install them by running the following command:
